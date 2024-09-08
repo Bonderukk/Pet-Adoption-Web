@@ -9,14 +9,18 @@ app = Flask(__name__)
 
 # Function to connect to the database
 def get_db_connection():
-    conn = sqlite3.connect('pets.db')
+    db_path = os.path.join(os.path.dirname(__file__), 'pets.db')
+    print(f"Connecting to database at {db_path}")
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 
 
 # Initialize the database and create the table if it doesn't exist
 def init_db():
-    if not os.path.exists('pets.db'):
+    db_path = os.path.join(os.path.dirname(__file__), 'pets.db')
+    if not os.path.exists(db_path):
+        print(f"Database file {db_path} does not exist. Creating it now.")
         connection = get_db_connection()
         cursor = connection.cursor()
         cursor.execute('''
@@ -105,6 +109,7 @@ def contact():
         name = request.form.get('name')
         email = request.form.get('email')
         message = request.form.get('message')
+        # Here you could handle form data, e.g., send an email
         return redirect(url_for('index'))
     return render_template('contact.html')
 
