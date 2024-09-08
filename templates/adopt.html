@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopt a Pet</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Adopt a Pet</h1>
+            <nav>
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('adopt', category='all') }}">Adopt a Pet</a>
+                <a href="{{ url_for('contact') }}">Contact Us</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <h2>Available Pets</h2>
+
+        <!-- Form to filter pets by category -->
+        <form action="{{ url_for('adopt') }}" method="get">
+            <label for="category">Choose a category:</label>
+            <select id="category" name="category">
+                <option value="all" {% if category == all %}selected{% endif %}>All</option>
+                <option value="dogs" {% if category == dogs %}selected{% endif %}>Dogs</option>
+                <option value="cats" {% if category == cats %}selected{% endif %}>Cats</option>
+                <option value="other" {% if category == other %}selected{% endif %}>Other Animals</option>
+                <option value="shelters" {% if category == shelters %}selected{% endif %}>Shelters</option>
+            </select>
+            <button type="submit">Filter</button>
+        </form>
+
+        <!-- Display pets based on the selected category -->
+        <section class="pet-list">
+            <p>Category: {{ category }}</p>
+            <!-- Example of a pet card -->
+            <div class="pet-card">
+                <img src="https://via.placeholder.com/150" alt="Pet Name">
+                <h3>Pet Name</h3>
+                <p>Breed: Breed Name</p>
+                <p>Age: Age</p>
+                <a href="#" class="btn">Learn More</a>
+            </div>
+            <!-- Add more pet cards as needed -->
+        </section>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Pet Adoption Slovakia</p>
+        </div>
+    </footer>
+</body>
+</html>

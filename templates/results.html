@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Pets near {{ location }}</h1>
+            <nav>
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('adopt', category='all') }}">Adopt a Pet</a>
+                <a href="{{ url_for('contact') }}">Contact Us</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="pet-list">
+            {% if pets %}
+                <h2>Pets within 50km of {{ location }}:</h2>
+                <div class="pet-list">
+                    {% for pet in pets %}
+                        <div class="pet-card">
+                            <img src="https://via.placeholder.com/150" alt="{{ pet.name }}">
+                            <h3>{{ pet.name }}</h3>
+                            <p>Breed: {{ pet.breed }}</p>
+                            <p>Age: {{ pet.age }} years</p>
+                            <a href="#" class="btn">Learn More</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No pets found within 50km of {{ location }}.</p>
+            {% endif %}
+        </section>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Pet Adoption Slovakia</p>
+        </div>
+    </footer>
+</body>
+</html>

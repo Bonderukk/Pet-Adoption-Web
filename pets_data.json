@@ -1,0 +1,6 @@
+[
+    {"id": 1, "name": "Rex", "type": "dog", "location": "Bratislava", "shelter": "Psí útulok Bratislava"},
+    {"id": 2, "name": "Micka", "type": "cat", "location": "Košice", "shelter": "Mačací domov Košice"},
+    {"id": 3, "name": "Bella", "type": "dog", "location": "Nitra", "shelter": "Útulok pre psov Nitra"},
+    {"id": 4, "name": "Papagáj", "type": "other", "location": "Prešov", "shelter": "Záchranná stanica Prešov"}
+]
