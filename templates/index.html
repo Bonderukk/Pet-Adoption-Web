@@ -14,50 +14,44 @@
                 <a href="{{ url_for('index') }}">Home</a>
                 <a href="{{ url_for('adopt', category='all') }}">Adopt a Pet</a>
                 <a href="{{ url_for('contact') }}">Contact Us</a>
+                <a href="{{ url_for('add_pet') }}">Add Pet</a> <!-- Added this line -->
             </nav>
         </div>
     </header>
+
+
     <main>
-        <div class="hero">
-            <h2>Find Your Perfect Pet</h2>
-            <p>Browse through our listings of pets available for adoption.</p>
-            <form action="{{ url_for('search') }}" method="get">
-                <div class="search-bar">
+        <!-- Find Your Perfect Pet -->
+        <section class="search-section">
+            <div class="container">
+                <h2>Find Your Perfect Pet</h2>
+                <p>Browse through our listings of pets available for adoption.</p>
+                <form action="{{ url_for('search') }}" method="GET">
                     <input type="text" name="location" placeholder="Enter your location..." required>
                     <button type="submit">Search</button>
-                </div>
-            </form>
-        </div>
-
-        <section class="categories">
-            <h2>Browse by Category</h2>
-            <div class="category-buttons">
-                <a href="{{ url_for('adopt', category='dogs') }}" class="btn">Dogs</a>
-                <a href="{{ url_for('adopt', category='cats') }}" class="btn">Cats</a>
-                <a href="{{ url_for('adopt', category='other') }}" class="btn">Other Animals</a>
-                <a href="{{ url_for('adopt', category='shelters') }}" class="btn">Shelters</a>
+                </form>
             </div>
         </section>
 
-        <section class="featured-pets">
-            <h2>Featured Pets</h2>
-            <div class="pet-list">
-                <!-- Example of featured pets -->
-                <div class="pet-card">
-                    <img src="https://via.placeholder.com/150" alt="Pet Name">
-                    <h3>Pet Name</h3>
-                    <p>Breed: Breed Name</p>
-                    <p>Age: Age</p>
-                    <a href="{{ url_for('adopt', category='dogs') }}" class="btn">Learn More</a>
+        <!-- Browse by Category -->
+        <section class="category-section">
+            <div class="container">
+                <h2>Browse by Category</h2>
+                <div class="category-buttons">
+                    <a href="{{ url_for('adopt', category='Dogs') }}" class="btn">Dogs</a>
+                    <a href="{{ url_for('adopt', category='Cats') }}" class="btn">Cats</a>
+                    <a href="{{ url_for('adopt', category='Other') }}" class="btn">Other Animals</a>
+                    <a href="{{ url_for('adopt', category='Shelters') }}" class="btn">Shelters</a>
                 </div>
-                <!-- Add more pet cards as needed -->
             </div>
         </section>
     </main>
+
     <footer>
         <div class="container">
             <p>&copy; 2024 Pet Adoption Slovakia</p>
         </div>
     </footer>
+
 </body>
 </html>

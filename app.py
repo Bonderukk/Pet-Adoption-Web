@@ -6,21 +6,67 @@ import os
 
 app = Flask(__name__)
 
+# Slovak city coordinates (latitude and longitude)
+city_coordinates = {
+    'Bratislava': (48.1486, 17.1077),
+    'Košice': (48.7164, 21.2611),
+    'Prešov': (48.9985, 21.2336),
+    'Žilina': (49.2234, 18.7394),
+    'Nitra': (48.3069, 18.0854),
+    'Trnava': (48.3774, 17.5883),
+    'Trenčín': (48.8945, 18.0444),
+    'Banská Bystrica': (48.7395, 19.1531),
+}
 
-# Function to connect to the database
+import os
+
 def get_db_connection():
-    db_path = os.path.join(os.path.dirname(__file__), 'pets.db')
-    print(f"Connecting to database at {db_path}")
+    base_dir = os.path.dirname(os.path.abspath(__file__))  # Get the current directory of app.py
+    db_path = os.path.join(base_dir, 'pets.db')            # Construct the absolute path to the database
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 
 
-# Initialize the database and create the table if it doesn't exist
+# Route to render the "Add Pet" form and handle form submissions
+@app.route('/add_pet', methods=['GET', 'POST'])
+def add_pet():
+    if request.method == 'POST':
+        name = request.form['name']
+        breed = request.form['breed']
+        age = int(request.form['age'])
+        category = request.form['category']
+        city = request.form['city']
+
+        # Use Nominatim to get the latitude and longitude of the city
+        geolocator = Nominatim(user_agent="pet_adoption_sk")
+        location = geolocator.geocode(city)
+
+        if location:
+            latitude = location.latitude
+            longitude = location.longitude
+
+            # Insert the new pet into the database
+            conn = get_db_connection()
+            conn.execute('''
+                INSERT INTO pets (name, breed, age, category, city, latitude, longitude)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''', (name, breed, age, category, city, latitude, longitude))
+            conn.commit()
+            conn.close()
+
+            return redirect(url_for('index'))
+        else:
+            # If the city is not found, show an error message
+            error_message = f"City '{city}' not found. Please choose from the predefined cities."
+            return render_template('add_pet.html', error_message=error_message)
+
+    return render_template('add_pet.html')
+
+
+# Initialize the database (create table if not exists)
 def init_db():
-    db_path = os.path.join(os.path.dirname(__file__), 'pets.db')
-    if not os.path.exists(db_path):
-        print(f"Database file {db_path} does not exist. Creating it now.")
+    if not os.path.exists('pets.db'):
         connection = get_db_connection()
         cursor = connection.cursor()
         cursor.execute('''
@@ -29,6 +75,8 @@ def init_db():
                 name TEXT NOT NULL,
                 breed TEXT NOT NULL,
                 age INTEGER NOT NULL,
+                category TEXT NOT NULL,
+                city TEXT NOT NULL,
                 latitude REAL NOT NULL,
                 longitude REAL NOT NULL
             )
@@ -37,7 +85,7 @@ def init_db():
         connection.close()
 
 
-# Insert a sample pet into the database
+# Insert a sample pet into the database (if not already exists)
 def insert_sample_pet():
     connection = get_db_connection()
     cursor = connection.cursor()
@@ -48,21 +96,25 @@ def insert_sample_pet():
 
     if not result:
         cursor.execute('''
-            INSERT INTO pets (name, breed, age, latitude, longitude)
-            VALUES ('Buddy', 'Golden Retriever', 3, 48.1486, 17.1077)  -- Bratislava coordinates
+            INSERT INTO pets (name, breed, age, category, city, latitude, longitude)
+            VALUES ('Buddy', 'Golden Retriever', 3, 'Dog', 'Bratislava', 48.1486, 17.1077)
         ''')
         connection.commit()
 
     connection.close()
 
 
-# Home route
+# Home route to display pets
 @app.route('/')
 def index():
-    return render_template('index.html')
+    connection = get_db_connection()
+    pets = connection.execute('SELECT * FROM pets').fetchall()
+    connection.close()
+
+    return render_template('index.html', pets=pets)
 
 
-# Search route
+# Search route to find pets within 50 km radius
 @app.route('/search', methods=['GET'])
 def search():
     location = request.args.get('location')
@@ -94,11 +146,27 @@ def search():
     return render_template('index.html', location=location)
 
 
-# Adoption route
 @app.route('/adopt', methods=['GET'])
 def adopt():
     category = request.args.get('category', 'all')  # Default to 'all' if no category is specified
-    return render_template('adopt.html', category=category)
+
+    conn = get_db_connection()
+
+    # Fetch pets from the database based on the selected category
+    if category == 'all':
+        pets = conn.execute('SELECT * FROM pets').fetchall()
+    elif category == 'dogs':
+        pets = conn.execute("SELECT * FROM pets WHERE category = 'Dog'").fetchall()
+    elif category == 'cats':
+        pets = conn.execute("SELECT * FROM pets WHERE category = 'Cat'").fetchall()
+    elif category == 'other':
+        pets = conn.execute("SELECT * FROM pets WHERE category = 'Other'").fetchall()
+    elif category == 'shelters':
+        pets = conn.execute("SELECT * FROM pets WHERE category = 'Shelter'").fetchall()
+
+    conn.close()
+
+    return render_template('adopt.html', pets=pets, category=category)
 
 
 # Contact route
