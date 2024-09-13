@@ -26,11 +26,11 @@
         <form action="{{ url_for('adopt') }}" method="get">
             <label for="category">Choose a category:</label>
             <select id="category" name="category">
-                <option value="all" {% if category == 'all' %}selected{% endif %}>All</option>
-                <option value="dogs" {% if category == 'dogs' %}selected{% endif %}>Dogs</option>
-                <option value="cats" {% if category == 'cats' %}selected{% endif %}>Cats</option>
-                <option value="other" {% if category == 'other' %}selected{% endif %}>Other Animals</option>
-                <option value="shelters" {% if category == 'shelters' %}selected{% endif %}>Shelters</option>
+                <option value="all" {% if category == all %}selected{% endif %}>All</option>
+                <option value="dogs" {% if category == Dogs %}selected{% endif %}>Dogs</option>
+                <option value="cats" {% if category == cats %}selected{% endif %}>Cats</option>
+                <option value="other" {% if category == other %}selected{% endif %}>Other Animals</option>
+                <option value="shelters" {% if category == shelters %}selected{% endif %}>Shelters</option>
             </select>
             <button type="submit">Filter</button>
         </form>

@@ -1,8 +1,14 @@
+/* General Page Styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
 }
 
 header {
@@ -12,8 +18,6 @@ header {
 }
 
 header .container {
-    width: 80%;
-    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -27,100 +31,123 @@ nav a {
     color: #fff;
     text-decoration: none;
     margin: 0 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
-main {
-    width: 80%;
-    margin: 0 auto;
-    padding: 2rem 0;
+nav a:hover {
+    text-decoration: underline;
 }
 
+/* Hero Section */
 .hero {
-    background: #e2e2e2;
-    padding: 2rem;
+    background: url('{{ url_for('static', filename='images/hero-background.jpg') }}') center/cover no-repeat;
+    color: #fff;
+    padding: 5rem 0;
     text-align: center;
+    position: relative;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.hero h2 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.5rem;
     margin-bottom: 2rem;
 }
 
 .search-bar {
     display: flex;
     justify-content: center;
-    margin-top: 1rem;
+    align-items: center;
+    gap: 1rem;
 }
 
 .search-bar input[type="text"] {
-    padding: 0.5rem;
+    padding: 1rem;
+    width: 250px;
     font-size: 1rem;
-    border: 1px solid #ccc;
+    border: none;
     border-radius: 4px;
 }
 
 .search-bar button {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    background: #333;
-    color: #fff;
+    padding: 1rem;
+    background: #673AB7;
     border: none;
+    color: #fff;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 1.2rem;
 }
 
 .search-bar button:hover {
-    background: #555;
+    background: #5E35B1;
 }
 
-.categories {
+/* Category Section */
+.category-section {
+    background-color: #f9f9f9;
+    padding: 3rem 0;
     text-align: center;
-    margin-bottom: 2rem;
 }
 
 .category-buttons {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    gap: 2rem;
+    margin-top: 2rem;
 }
 
 .category-buttons .btn {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: #333;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 4px;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    width: 150px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.category-buttons .btn img {
+    width: 50px;
+    margin-bottom: 1rem;
+}
+
+.category-buttons .btn p {
+    margin: 0;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #555;
 }
 
 .category-buttons .btn:hover {
-    background: #555;
+    transform: translateY(-10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.featured-pets {
-    margin-bottom: 2rem;
-}
-
-.pet-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-}
-
-.pet-card {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 1rem;
-    text-align: center;
-    width: 200px;
-}
-
-.pet-card img {
-    max-width: 100%;
-    border-radius: 8px;
-}
-
+/* Footer */
 footer {
-    background: #333;
+    background-color: #333;
     color: #fff;
-    text-align: center;
     padding: 1rem 0;
+    text-align: center;
+    font-size: 0.9rem;
 }

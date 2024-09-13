@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pet Adoption Slovakia</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 </head>
 <body>
     <header>
@@ -14,21 +16,21 @@
                 <a href="{{ url_for('index') }}">Home</a>
                 <a href="{{ url_for('adopt', category='all') }}">Adopt a Pet</a>
                 <a href="{{ url_for('contact') }}">Contact Us</a>
-                <a href="{{ url_for('add_pet') }}">Add Pet</a> <!-- Added this line -->
+                <a href="{{ url_for('add_pet') }}">Add Pet</a>
             </nav>
         </div>
     </header>
 
-
     <main>
-        <!-- Find Your Perfect Pet -->
-        <section class="search-section">
-            <div class="container">
-                <h2>Find Your Perfect Pet</h2>
-                <p>Browse through our listings of pets available for adoption.</p>
-                <form action="{{ url_for('search') }}" method="GET">
-                    <input type="text" name="location" placeholder="Enter your location..." required>
-                    <button type="submit">Search</button>
+        <!-- Hero Search Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Find your new best friend</h2>
+                <p>Browse pets from our network of over 14,500 shelters and rescues.</p>
+                <form class="search-bar" action="{{ url_for('search') }}" method="GET">
+                    <input type="text" name="location" placeholder="Search Terrier, Kitten, etc." required>
+                    <input type="text" name="location" placeholder="Bratislava" required>
+                    <button type="submit"><i class="fas fa-search"></i></button>
                 </form>
             </div>
         </section>
@@ -36,15 +38,27 @@
         <!-- Browse by Category -->
         <section class="category-section">
             <div class="container">
-                <h2>Browse by Category</h2>
                 <div class="category-buttons">
-                    <a href="{{ url_for('adopt', category='Dogs') }}" class="btn">Dogs</a>
-                    <a href="{{ url_for('adopt', category='Cats') }}" class="btn">Cats</a>
-                    <a href="{{ url_for('adopt', category='Other') }}" class="btn">Other Animals</a>
-                    <a href="{{ url_for('adopt', category='Shelters') }}" class="btn">Shelters</a>
+                    <a href="{{ url_for('adopt', category='Dogs') }}" class="btn">
+                        <img src="{{ url_for('static', filename='icons/dog.png') }}" alt="Dog Icon">
+                        <p>Dogs</p>
+                    </a>
+                    <a href="{{ url_for('adopt', category='Cats') }}" class="btn">
+                        <img src="{{ url_for('static', filename='icons/cat.png') }}" alt="Cat Icon">
+                        <p>Cats</p>
+                    </a>
+                    <a href="{{ url_for('adopt', category='Other') }}" class="btn">
+                        <img src="{{ url_for('static', filename='icons/paw.png') }}" alt="Other Animals Icon">
+                        <p>Other Animals</p>
+                    </a>
+                    <a href="{{ url_for('adopt', category='Shelters') }}" class="btn">
+                        <img src="{{ url_for('static', filename='icons/shelter.png') }}" alt="Shelter Icon">
+                        <p>Shelters & Rescues</p>
+                    </a>
                 </div>
             </div>
         </section>
+
     </main>
 
     <footer>

@@ -148,6 +148,7 @@ def search():
 
 @app.route('/adopt', methods=['GET'])
 def adopt():
+
     category = request.args.get('category', 'all')  # Default to 'all' if no category is specified
 
     conn = get_db_connection()
