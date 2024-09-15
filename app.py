@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
-from geopy.geocoders import Nominatim
+from geopy import location
 from geopy.distance import geodesic
 import sqlite3
 import os
+from flask import Flask, render_template, request, redirect, url_for
+from geopy.geocoders import Nominatim
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -18,7 +21,6 @@ city_coordinates = {
     'Banská Bystrica': (48.7395, 19.1531),
 }
 
-import os
 
 def get_db_connection():
     base_dir = os.path.dirname(os.path.abspath(__file__))  # Get the current directory of app.py
@@ -28,19 +30,26 @@ def get_db_connection():
     return conn
 
 
-# Route to render the "Add Pet" form and handle form submissions
-from werkzeug.utils import secure_filename
-# Folder to store uploaded pet images
-UPLOAD_FOLDER = 'static/uploads/'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+app = Flask(__name__)
 
+
+
+UPLOAD_FOLDER = 'C:/Users/matus/PycharmProjects/AdoptPet/static/uploads/'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-
-# Function to check if the file type is allowed
+# Helper function to check file extensions
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
+@app.route('/uploads/<filename>')
+def get_image(filename):
+    return redirect(url_for('static', filename='uploads/' + filename))
+
+
+import os
+from werkzeug.utils import secure_filename
 
 @app.route('/add_pet', methods=['GET', 'POST'])
 def add_pet():
@@ -53,26 +62,19 @@ def add_pet():
 
         # Handle the image upload
         if 'pet_image' not in request.files:
-            return 'No file part'
-
+            return redirect(request.url)
         file = request.files['pet_image']
-
         if file.filename == '':
-            return 'No selected file'
-
+            return redirect(request.url)
         if file and allowed_file(file.filename):
-            # Save the file securely
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            print(f"Saving file to {file_path}")  # Debug line
+            file.save(file_path)
 
-        # Use Nominatim to get the latitude and longitude of the city
-        geolocator = Nominatim(user_agent="pet_adoption_sk")
-        location = geolocator.geocode(city)
-
-        if location:
-            latitude = location.latitude
-            longitude = location.longitude
-
+        # Get city coordinates (assuming valid Slovak cities)
+        latitude, longitude = city_coordinates.get(city, (None, None))
+        if latitude and longitude:
             # Insert the new pet into the database, including the image filename
             conn = get_db_connection()
             conn.execute('''
@@ -84,37 +86,34 @@ def add_pet():
 
             return redirect(url_for('index'))
         else:
-            # If the city is not found, show an error message
             error_message = f"City '{city}' not found. Please choose from the predefined cities."
             return render_template('add_pet.html', error_message=error_message)
 
     return render_template('add_pet.html')
 
 
-# Initialize the database (create table if not exists)
+
+
 def init_db():
-    if not os.path.exists('pets.db'):
-        connection = get_db_connection()
-        cursor = connection.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS pets (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                breed TEXT NOT NULL,
-                age INTEGER NOT NULL,
-                category TEXT NOT NULL,
-                city TEXT NOT NULL,
-                latitude REAL NOT NULL,
-                longitude REAL NOT NULL,
-                image_filename TEXT
-            )
-        ''')
-        connection.commit()
-        connection.close()
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute('''CREATE TABLE IF NOT EXISTS pets (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        breed TEXT NOT NULL,
+        age INTEGER NOT NULL,
+        category TEXT NOT NULL,
+        city TEXT NOT NULL,
+        latitude REAL NOT NULL,
+        longitude REAL NOT NULL,
+        image_filename TEXT  -- Store the image filename
+    )''')
+
+    conn.commit()
+    conn.close()
 
 
-
-# Insert a sample pet into the database (if not already exists)
 def insert_sample_pet():
     connection = get_db_connection()
     cursor = connection.cursor()
@@ -212,10 +211,26 @@ def contact():
     return render_template('contact.html')
 
 
+
+def add_image_data_column():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Add image_data column as a BLOB
+    cursor.execute('''
+        ALTER TABLE pets ADD COLUMN image_data BLOB
+    ''')
+
+    conn.commit()
+    conn.close()
+
+
+
+
 if __name__ == '__main__':
     # Initialize the database and insert a sample pet
     init_db()
-    insert_sample_pet()
+    #insert_sample_pet()
 
     # Run the Flask app
     app.run(debug=True)
