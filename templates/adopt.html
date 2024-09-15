@@ -41,7 +41,7 @@
                 <div class="pet-list">
                     {% for pet in pets %}
                         <div class="pet-card">
-                            <img src="https://via.placeholder.com/150" alt="{{ pet.name }}">
+                            <img src="{{ url_for('static', filename='uploads/' + pet['image']) }}" alt="{{ pet.name }}">
                             <h3>{{ pet.name }}</h3>
                             <p>Breed: {{ pet.breed }}</p>
                             <p>Age: {{ pet.age }} years</p>
@@ -54,6 +54,7 @@
                 <p>No pets found in this category.</p>
             {% endif %}
         </section>
+
     </main>
 
     <footer>

@@ -3,49 +3,92 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: #f4f4f4;
+    background: #f3e5f5; /* Light lavender background */
 }
 
+/* Container */
 .container {
     width: 80%;
     margin: 0 auto;
 }
 
+/* Basic Header Styling */
 header {
-    background: #333;
-    color: #fff;
-    padding: 1rem 0;
+    background: #283593; /* Indigo color for a strong, professional appearance */
+    color: #ffffff; /* White text for contrast */
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
 }
 
+/* Header Container */
 header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 
+/* Header Title */
 header h1 {
     margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease-in-out;
 }
 
-nav a {
-    color: #fff;
+/* Navigation Styling */
+header nav {
+    display: flex;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Navigation Links */
+header nav a {
+    color: #ffffff; /* White for links */
     text-decoration: none;
-    margin: 0 1rem;
-    font-weight: bold;
-    text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.3s ease;
+    position: relative;
 }
 
-nav a:hover {
-    text-decoration: underline;
+/* Hover and Focus Effects for Navigation Links */
+header nav a:hover,
+header nav a:focus {
+    color: #f44336; /* Vibrant red for a fresh highlight */
+    transform: scale(1.1);
+}
+
+/* Animation for Header on Scroll */
+@keyframes slideIn {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+header {
+    animation: slideIn 0.5s ease-out;
 }
 
 /* Hero Section */
 .hero {
     background: url('{{ url_for('static', filename='images/hero-background.jpg') }}') center/cover no-repeat;
-    color: #fff;
+    color: #ffffff; /* White text for contrast */
     padding: 5rem 0;
     text-align: center;
     position: relative;
+    background-color: #3f51b5; /* Fallback background color in indigo */
 }
 
 .hero::after {
@@ -55,7 +98,7 @@ nav a:hover {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.4); /* Slightly darker overlay for readability */
 }
 
 .hero-content {
@@ -73,6 +116,7 @@ nav a:hover {
     margin-bottom: 2rem;
 }
 
+/* Search Bar */
 .search-bar {
     display: flex;
     justify-content: center;
@@ -80,32 +124,58 @@ nav a:hover {
     gap: 1rem;
 }
 
+/* Search Input */
 .search-bar input[type="text"] {
     padding: 1rem;
     width: 250px;
     font-size: 1rem;
-    border: none;
+    border: 1px solid #3f51b5; /* Indigo border for input */
     border-radius: 4px;
 }
 
+/* Basic Search Button Styling */
 .search-bar button {
     padding: 1rem;
-    background: #673AB7;
+    background: #f44336; /* Vibrant red button */
     border: none;
-    color: #fff;
+    color: #ffffff; /* White text for contrast */
     border-radius: 4px;
     cursor: pointer;
     font-size: 1.2rem;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover Effects */
+.search-bar button:hover {
+    background-color: #e53935; /* Darker red on hover */
+    transform: scale(1.1); /* Slightly enlarges the button */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Adds a shadow for depth */
+}
+
+/* Optional: Adding a pulse animation on hover */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 .search-bar button:hover {
-    background: #5E35B1;
+    animation: pulse 1s infinite;
 }
 
 /* Category Section */
 .category-section {
-    background-color: #f9f9f9;
-    padding: 3rem 0;
+    background-color: #283593; /* Indigo background */
+    padding: 1rem 0;
     text-align: center;
 }
 
@@ -117,7 +187,7 @@ nav a:hover {
 }
 
 .category-buttons .btn {
-    background-color: #fff;
+    background-color: #ffffff; /* White background for buttons */
     border-radius: 12px;
     padding: 2rem;
     text-align: center;
@@ -135,7 +205,7 @@ nav a:hover {
     margin: 0;
     font-weight: bold;
     text-transform: uppercase;
-    color: #555;
+    color: #283593; /* Indigo text for consistency */
 }
 
 .category-buttons .btn:hover {
@@ -143,10 +213,113 @@ nav a:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+/* General styles for "Add a Pet" page only */
+.add-pet-page body {
+    font-family: 'Arial', sans-serif;
+    background: #f3e5f5; /* Light lavender background */
+}
+
+.add-pet-page .container {
+    width: 90%;
+    margin: auto;
+}
+
+.add-pet-page header {
+    background: #283593; /* Indigo */
+    color: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.add-pet-page header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-pet-page header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.add-pet-page header nav {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.add-pet-page header nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.add-pet-page header nav a:hover {
+    color: #f44336; /* Red hover effect */
+}
+
+.add-pet-page main {
+    padding: 2rem 0;
+}
+
+.add-pet-page form {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.add-pet-page form label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.add-pet-page form input, .add-pet-page form select, .add-pet-page form button {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #3f51b5; /* Indigo border */
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.add-pet-page form input[type="file"] {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: none;
+}
+
+.add-pet-page form button {
+    background-color: #283593; /* Indigo button */
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+}
+
+.add-pet-page form button:hover {
+    background-color: #1e88e5; /* Slightly lighter indigo on hover */
+}
+
+.add-pet-page footer {
+    background-color: #c62828; /* Red footer */
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+}
+
 /* Footer */
 footer {
-    background-color: #333;
-    color: #fff;
+    background-color: #283593; /* Indigo */
+    color: #ffffff; /* White text */
     padding: 1rem 0;
     text-align: center;
     font-size: 0.9rem;

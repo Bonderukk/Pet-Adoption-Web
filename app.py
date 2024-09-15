@@ -29,6 +29,19 @@ def get_db_connection():
 
 
 # Route to render the "Add Pet" form and handle form submissions
+from werkzeug.utils import secure_filename
+# Folder to store uploaded pet images
+UPLOAD_FOLDER = 'static/uploads/'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+# Function to check if the file type is allowed
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 @app.route('/add_pet', methods=['GET', 'POST'])
 def add_pet():
     if request.method == 'POST':
@@ -38,6 +51,20 @@ def add_pet():
         category = request.form['category']
         city = request.form['city']
 
+        # Handle the image upload
+        if 'pet_image' not in request.files:
+            return 'No file part'
+
+        file = request.files['pet_image']
+
+        if file.filename == '':
+            return 'No selected file'
+
+        if file and allowed_file(file.filename):
+            # Save the file securely
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
         # Use Nominatim to get the latitude and longitude of the city
         geolocator = Nominatim(user_agent="pet_adoption_sk")
         location = geolocator.geocode(city)
@@ -46,12 +73,12 @@ def add_pet():
             latitude = location.latitude
             longitude = location.longitude
 
-            # Insert the new pet into the database
+            # Insert the new pet into the database, including the image filename
             conn = get_db_connection()
             conn.execute('''
-                INSERT INTO pets (name, breed, age, category, city, latitude, longitude)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            ''', (name, breed, age, category, city, latitude, longitude))
+                INSERT INTO pets (name, breed, age, category, city, latitude, longitude, image_filename)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (name, breed, age, category, city, latitude, longitude, filename))
             conn.commit()
             conn.close()
 
@@ -78,11 +105,13 @@ def init_db():
                 category TEXT NOT NULL,
                 city TEXT NOT NULL,
                 latitude REAL NOT NULL,
-                longitude REAL NOT NULL
+                longitude REAL NOT NULL,
+                image_filename TEXT
             )
         ''')
         connection.commit()
         connection.close()
+
 
 
 # Insert a sample pet into the database (if not already exists)
