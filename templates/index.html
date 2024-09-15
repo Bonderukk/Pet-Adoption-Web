@@ -15,7 +15,6 @@
             <nav>
                 <a href="{{ url_for('index') }}">Home</a>
                 <a href="{{ url_for('adopt', category='all') }}">Adopt a Pet</a>
-                <a href="{{ url_for('contact') }}">Contact Us</a>
                 <a href="{{ url_for('add_pet') }}">Add Pet</a>
             </nav>
         </div>
@@ -28,7 +27,7 @@
                 <h2>Find your new best friend</h2>
                 <p>Browse pets from our network of over 14,500 shelters and rescues.</p>
                 <form class="search-bar" action="{{ url_for('search') }}" method="GET">
-                    <input type="text" name="location" placeholder="Search Terrier, Kitten, etc." required>
+                    <input type="text" name="category" placeholder="Search Dog, Cat, Other" required>
                     <input type="text" name="location" placeholder="Bratislava" required>
                     <button type="submit"><i class="fas fa-search"></i></button>
                 </form>

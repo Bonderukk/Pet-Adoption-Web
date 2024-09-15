@@ -143,9 +143,11 @@ def index():
 
 
 # Search route to find pets within 50 km radius
+
 @app.route('/search', methods=['GET'])
 def search():
     location = request.args.get('location')
+    category = request.args.get('category')
 
     if location:
         # Geocode the user input location to get coordinates
@@ -157,7 +159,8 @@ def search():
 
             # Fetch pets and their locations from the database
             conn = get_db_connection()
-            pets = conn.execute('SELECT * FROM pets').fetchall()
+            query = 'SELECT * FROM pets WHERE category LIKE ?'
+            pets = conn.execute(query, ('%' + category + '%',)).fetchall()
             conn.close()
 
             # Filter pets within 50 km radius
@@ -169,10 +172,12 @@ def search():
                 if distance <= 50:  # 50 km radius
                     pets_within_radius.append(pet)
 
-            return render_template('results.html', pets=pets_within_radius, location=location)
+            if pets_within_radius:
+                return render_template('results.html', pets=pets_within_radius, location=location)
+            else:
+                return render_template('no_results.html', location=location)
 
     return render_template('index.html', location=location)
-
 
 @app.route('/adopt', methods=['GET'])
 def adopt():

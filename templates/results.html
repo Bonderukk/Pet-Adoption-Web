@@ -24,11 +24,12 @@
                 <div class="pet-list">
                     {% for pet in pets %}
                         <div class="pet-card">
-                            <img src="https://via.placeholder.com/150" alt="{{ pet.name }}">
+                            <!-- Use the new image route -->
+                            <img src="{{ url_for('get_image', filename=pet.image_filename) }}" alt="{{ pet.name }}" style="width: 150px; height: 150px; object-fit: cover;">
                             <h3>{{ pet.name }}</h3>
                             <p>Breed: {{ pet.breed }}</p>
                             <p>Age: {{ pet.age }} years</p>
-                            <a href="#" class="btn">Learn More</a>
+                            <p>Location: {{ pet.city }}</p>
                         </div>
                     {% endfor %}
                 </div>
